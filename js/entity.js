@@ -1,3 +1,46 @@
+//new Entity class I made with Kevin Deyne
+
+class Entity {
+	var rate = 30;
+	var scale = 0.60;
+	var sprite = null;
+	
+	var spriteAnimations = {
+		frames:[],
+		currentFrame: 0
+	};
+	
+	constructor(data, frameCoordinates, x, y, w, h) {
+		this.data = data;
+		this.frameCoordinates = frameCoordinates;
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = scale * h;
+		
+	frameCoordinates.forEach(function (coordinates) {
+	spriteAnimations.frames.push(new Entity.Sprite(data.spriteSheet, coordinates[0], coordinates[1], coordinates[2], coordinates[3]));
+	});	
+		
+	}	
+		
+    animation(data) {
+        if (data.animationFrame % rate === 0) {
+            this.sprite = self.spriteAnimations.frames[self.spriteAnimations.currentFrame];
+            self.spriteAnimations.currentFrame++;
+            
+            if (self.spriteAnimations.currentFrame > self.spriteAnimations.frames.length - 1) {
+                self.spriteAnimations.currentFrame = 7   /*spriteAnimations.frames.length - 1*/;
+            }
+            this.w = this.sprite.srcW * scale;
+        }
+    }
+		
+}
+	
+
+//Old Entity Singleton pattern from tutorial man.
+/*
 var Entity = {
 	init: function (data) {
 		data.marioAnimation = new Entity.marioAnimation(data);
@@ -28,7 +71,7 @@ var Entity = {
 				
 				if (spriteAnimations.currentFrame > spriteAnimations.frames.length - 1) {
 					spriteAnimations.currentFrame = 7	/*spriteAnimations.frames.length - 1*/;
-				}
+			/*	}
 				
 				self.w = self.sprite.srcW * scale;
 			}
@@ -38,7 +81,7 @@ var Entity = {
 			spriteAnimations.frames.push(new Entity.Sprite(data.spriteSheet, coordinates[0], coordinates[1], coordinates[2], coordinates[3]));
 		})
 		
-	},
+	},*/
 	
 	//Helper Class
 	Sprite: function (img, srcX, srcY, srcW, srcH) {

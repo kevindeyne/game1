@@ -1,7 +1,17 @@
 var Game = {
-	init: function () {
-		var canvas = document.getElementById("canvas");
-		var ctx = canvas.getContext("2d");
+    init: function () {
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        
+		activeEntities = [];
+		
+        var w = 600;
+        var h = 1000;
+        
+        var framesRita = [];        
+        for(var i=0; i < 12; i++){
+            framesRita.push([i*w,0,w,h]);
+        }
 		
 		var stage = {
 			canvas: canvas,
@@ -20,15 +30,15 @@ var Game = {
 				spriteSheet: spriteSheet,
 				stage: stage
 			};
-			
-			Entity.init(data);
+			var rita = new Entity(data, framesRita, 0, 0, 0, h);
+			activeEntities.push(rita);
 			Game.run(data);
 		})
 	},
 	
-	run: function (data) {
+	run: function (data, activeEntities) {
 		var loop = function () {
-			Game.update(data);
+			Game.update(data, activeEntities);
 			Game.render(data);
 			
 			data.animationFrame++;
@@ -39,8 +49,8 @@ var Game = {
 		loop();
 	},
 	
-	update: function (data) {
-		Animation.update(data);
+	update: function (data, activeEntities) {
+		Animation.update(data, activeEntities);
 	},
 	
 	render: function (data) {
