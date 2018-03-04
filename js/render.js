@@ -1,8 +1,11 @@
 var Render = {
-	update: function (data) {
-		data.stage.ctx.clearRect(0, 0, data.stage.canvas.width, data.stage.canvas.height);
-		Render.drawEntity(data.marioAnimation, data.stage.ctx);
-	},
+    update: function (data, activeEntities) {
+        data.stage.ctx.clearRect(0, 0, data.stage.canvas.width, data.stage.canvas.height);
+        
+        for (var index in activeEntities) {
+            Render.drawEntity(activeEntities[index], data.stage.ctx);
+        }
+    },
 	
 	//Helpers and Classes
 	drawEntity: function (entity, ctx) {

@@ -1,60 +1,52 @@
 var Game = {
     init: function () {
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-        
-		activeEntities = [];
+		var data = {
+			animationFrame: 0,
+			stage: Game.buildStage(),
+			game: this
+		};
+		data.game.activeEntities = [];
 		
-        var w = 600;
-        var h = 1000;
-        
-        var framesRita = [];        
-        for(var i=0; i < 12; i++){
-            framesRita.push([i*w,0,w,h]);
-        }
+		data.game.amountOfEntitiesBeforeGameRun = 2;
+		var rita = new Entity(data, "img/ritacolor2.png", 13, 0, 0, 600, 1000);
+		var zita = new Entity(data, "img/rita2.png", 13, 200, 0, 600, 1000);
+	},
 		
-		var stage = {
+	buildStage: function () {
+		var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");				
+		return {
 			canvas: canvas,
 			ctx: ctx
 		};
+	},
 		
-		var spriteSheet = new Image();
-		spriteSheet.src = "img/ritacolor2.png";
-		
-		spriteSheet.addEventListener("load", function () {
-			var self = this;
-			var spriteSheet = self;
-			
-			var data = {
-				animationFrame: 0,
-				spriteSheet: spriteSheet,
-				stage: stage
+	runIfLoaded: function (data) {
+		if(Game.readyToRun(data)){
+			var loop = function () {
+				var activeEntities = data.game.activeEntities;
+				Game.update(data, activeEntities);
+				Game.render(data, activeEntities);
+				
+				data.animationFrame++;
+				
+				window.requestAnimationFrame(loop);
 			};
-			var rita = new Entity(data, framesRita, 0, 0, 0, h);
-			activeEntities.push(rita);
-			Game.run(data);
-		})
+		
+			loop();
+		}
 	},
 	
-	run: function (data, activeEntities) {
-		var loop = function () {
-			Game.update(data, activeEntities);
-			Game.render(data);
-			
-			data.animationFrame++;
-			
-			window.requestAnimationFrame(loop);
-		};
-		
-		loop();
-	},
+	readyToRun: function (data) {
+		return data.game.activeEntities.length == data.game.amountOfEntitiesBeforeGameRun;
+	},	
 	
 	update: function (data, activeEntities) {
 		Animation.update(data, activeEntities);
 	},
 	
-	render: function (data) {
-		Render.update(data);
+	render: function (data, activeEntities) {
+		Render.update(data, activeEntities);
 	}
 };
 
